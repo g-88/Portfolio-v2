@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  /* Custom palette matching Elegant Dark theme: Pure black velvet, rich charcoal elements, and premium sky blue accents */
+  --color-brand-obsidian: #0a0a0a; /* Premium luxury dark backdrop */
+  --color-brand-coal: #121214; /* Sleek high-fidelity container gray */
+  --color-brand-slate: #1c1c1f; /* Elegant sharp divider lines (zinc-800 equivalent) */
+  --color-brand-mint: #38bdf8; /* Replaced with bright premium Sky Blue */
+  --color-brand-mint-accent: #0ea5e9; /* Replaced with Sky Blue Hover State */
+  --color-brand-silver: #d4d4d8; /* Zinc-300 light body text */
+  --color-brand-concrete: #71717a; /* Zinc-500 subtle detail text */
+}
+
+/* Base resets & animations */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: var(--color-brand-obsidian);
+  color: var(--color-brand-silver);
+}
+
+::selection {
+  background-color: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+}
+
+/* Elegant thin scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-brand-obsidian);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-slate);
+  border-radius: 1px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-mint);
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s infinite;
+}
