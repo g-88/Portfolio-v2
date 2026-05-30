@@ -287,6 +287,13 @@ export default function App() {
 				}),
 			});
 
+			const contentType = response.headers.get('content-type') ?? '';
+			if (!contentType.includes('application/json')) {
+				throw new Error(
+					'Contact API unavailable. Email griffin.leblanc@gmail.com directly.',
+				);
+			}
+
 			const data = await response.json();
 
 			if (!response.ok || !data.success) {

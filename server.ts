@@ -1,19 +1,10 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import { Resend } from "resend";
 import dotenv from "dotenv";
+import { handleContactSubmission } from "./lib/contact";
 
 dotenv.config();
-
-function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
 
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const RATE_LIMIT_MAX = 5;
@@ -53,80 +44,8 @@ async function startServer() {
   app.use(express.urlencoded({ extended: true }));
 
   app.post("/api/contact", contactRateLimit, async (req, res) => {
-    const { name, email, company, message } = req.body;
-
-    if (!name || !email || !message) {
-      return res.status(400).json({
-        success: false,
-        error: "Missing required values: 'name', 'email', and 'message' are mandatory.",
-      });
-    }
-
-    const resendKey = process.env.RESEND_API_KEY;
-    const fromAddress =
-      process.env.RESEND_FROM ||
-      "Griffin LeBlanc Portfolio <notifications@mail.griffinleblanc.ca>";
-    const toAddress = "griffin.leblanc@gmail.com";
-
-    if (!resendKey || resendKey === "re_123456789") {
-      console.log("RESEND_API_KEY is not defined. Responding in simulation mode.");
-      return res.json({
-        success: true,
-        mode: "simulation",
-        message: "Message received in simulation mode.",
-      });
-    }
-
-    try {
-      const resendObj = new Resend(resendKey);
-      const safeName = escapeHtml(String(name));
-      const safeEmail = escapeHtml(String(email));
-      const safeCompany = escapeHtml(String(company || "None"));
-      const safeMessage = escapeHtml(String(message));
-
-      const payload = {
-        from: fromAddress,
-        to: toAddress,
-        subject: `New Portfolio Message: ${name} from ${company || "New Client"}`,
-        replyTo: email,
-        text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || "None"}\n\nMessage:\n${message}`,
-        html: `
-          <div style="font-family: sans-serif; padding: 24px; color: #1c1c1f; max-width: 600px; margin: auto; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <h2 style="color: #0ea5e9; border-bottom: 2px solid #f1f5f9; padding-bottom: 12px; margin-top: 0;">Portfolio Briefing</h2>
-            <p style="margin: 8px 0;"><strong>Name:</strong> ${safeName}</p>
-            <p style="margin: 8px 0;"><strong>Email:</strong> ${safeEmail}</p>
-            <p style="margin: 8px 0;"><strong>Company:</strong> ${safeCompany}</p>
-            <div style="background-color: #f8fafc; padding: 16px; border-radius: 6px; margin-top: 16px; border-left: 4px solid #38bdf8; white-space: pre-line; line-height: 1.6;">
-              ${safeMessage}
-            </div>
-          </div>
-        `,
-      };
-
-      const mailData = await resendObj.emails.send(payload);
-
-      if (mailData.error) {
-        console.error("Resend API returned error status:", mailData.error);
-        return res.status(500).json({
-          success: false,
-          error: mailData.error.message || "Failed to send message.",
-        });
-      }
-
-      console.log(`Resend email sent successfully! ID: ${mailData.data?.id}`);
-      return res.json({
-        success: true,
-        mode: "live",
-        message: "Message sent successfully.",
-        id: mailData.data?.id,
-      });
-    } catch (error: any) {
-      console.error("Resend transmission failure:", error);
-      return res.status(500).json({
-        success: false,
-        error: error?.message || "Failed to send message.",
-      });
-    }
+    const result = await handleContactSubmission(req.body);
+    return res.status(result.status).json(result.body);
   });
 
   if (process.env.NODE_ENV !== "production") {
