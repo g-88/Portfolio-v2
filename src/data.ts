@@ -1,18 +1,28 @@
 import { OperatingPrinciple, Project } from './types';
 
+export const profile = {
+	title: 'Full Stack Software Engineer',
+	tagline: 'complex, messy',
+	taglineSuffix: 'workflows.',
+	summary:
+		'Full-stack engineer in regulated fintech. I automate manual configuration work, ship state-based compliance features across thousands of kiosks, and stay close to production logs when things break.',
+	availability: 'AVAILABLE FOR NEW PRODUCTION WORK · OTTAWA, CANADA',
+};
+
 export const projects: Project[] = [
 	{
 		id: 'bitcoin-depot',
 		title: 'Bitcoin Depot / Bitaccess',
-		subtitle: 'Production fintech engineering',
-		role: 'Full-stack Product Engineer',
+		subtitle: 'Regulated fintech · Bitcoin ATM fleet',
+		role: 'Full Stack Software Engineer',
 		description:
-			'Fintech product work built for real-world kiosk systems, intensive regulatory compliance, and high-stakes production rollouts.',
+			'Full-stack work on transaction-critical kiosk software—from QA and technical operations through production engineering on a fleet generating $600M+ in annual revenue.',
 		highlights: [
-			'Built resilient, state-based regulatory checking rules with json-rules-engine and robust production scripts.',
-			'Led high-impact pricing and fees architecture overhaul touching critical customer-facing kiosk screens, state rules, and deployment logistics.',
-			'Served as the anchor engineer for major multi-region production rollouts, escalations, and cross-repository debugging.',
-			'Constructed custom end-to-end telemetry rules to monitor active kiosk states and prevent transaction drop-offs due to network lag.',
+			'Automated legacy configuration logic for transaction-critical flows, eliminating 100% of manual configuration errors.',
+			'Led state-based regulatory projects with custom UI/UX across the Bitcoin ATM fleet.',
+			'Upgraded repositories from Node 18 to 20, improving performance by 10–15%.',
+			'Validated behavior across 9,000+ kiosks and enabled remote BTM simulator testing, saving ~20 minutes per hour of QA capacity.',
+			'Recognized as the highest-performing developer in 2025 performance reviews.',
 		],
 		links: [{ label: 'Bitcoin Depot', url: 'https://bitcoindepot.com' }],
 		techStack: [
@@ -20,26 +30,32 @@ export const projects: Project[] = [
 			'React',
 			'TypeScript',
 			'json-rules-engine',
-			'PostgreSQL',
-			'Shell Scripting',
+			'Playwright',
+			'Vitest',
+			'Express.js',
+			'MongoDB',
 			'Docker',
-			'QA Automation',
 		],
-		metric: '8,000+',
-		metricLabel: 'Active Cash Kiosks',
+		metric: '$600M+',
+		metricLabel: 'Annual Fleet Revenue',
 		type: 'fintech',
+		architecturalInsight: {
+			label: 'Regulated kiosk transaction pipeline',
+			description:
+				'State-based regulatory rules with json-rules-engine, full-flow regression testing before commits, and production troubleshooting with Mezmo, Grafana, and Amplitude across a Linux-based kiosk fleet.',
+		},
 	},
 	{
 		id: 'permipro',
 		title: 'PermiPro',
-		subtitle: 'Automating permit application workflows',
+		subtitle: 'Municipal permit SaaS',
 		role: 'Founding Engineer',
 		description:
-			'Built an enterprise-grade municipal workflow portal from absolute scratch, compressing slow multi-party physical processes into simple clicks.',
+			'Founding engineer on a municipal permit platform that reduces administrative costs by 60% and turnaround time by 75%.',
 		highlights: [
-			'Designed and implemented the core multi-tenant engine and multi-role authorization layer (Applicant, Inspector, Administrator).',
-			'Created highly reactive custom form builder interfaces that support complex conditional paths and real-time validation inputs.',
-			'Architected secure, reliable file attachment systems and asynchronous automated PDF reports generation pipeline.',
+			'Built core SaaS infrastructure: authentication, role-based permissions, and multi-tenant access control.',
+			'Implemented transactional email, multi-step forms, and workflow automation for permit applications.',
+			'Designed systems for applicants, inspectors, and administrators across municipal workflows.',
 		],
 		links: [{ label: 'Visit PermiPro', url: 'https://permipro.io' }],
 		techStack: [
@@ -49,93 +65,106 @@ export const projects: Project[] = [
 			'Node.js',
 			'PostgreSQL',
 			'Tailwind CSS',
-			'PDF Generation',
-			'Cloud Workflows',
+			'RBAC',
+			'Transactional Email',
 		],
-		metric: '12x',
-		metricLabel: 'Processing Speedup',
+		metric: '75%',
+		metricLabel: 'Turnaround Time Reduction',
 		type: 'startup',
+		architecturalInsight: {
+			label: 'Multi-role municipal workflow portal',
+			description:
+				'Role-based permissions for applicants, inspectors, and administrators—with multi-step forms, file attachments, and automated workflow transitions across tenant municipalities.',
+		},
 	},
 	{
 		id: 'faceout',
 		title: 'Faceout',
-		subtitle: 'Local business digital accelerator',
-		role: 'Founder & Developer',
+		subtitle: 'Web studio for local businesses',
+		role: 'Founder',
 		description:
-			'Small Ottawa web studio engineered around helping local independent brands secure high visibility, credibility, and conversion pipelines.',
+			'Founded and built a web studio platform for local business websites, SEO, and Google Business Profile management.',
 		highlights: [
-			'Formulated a lightweight, ultra-fast reusable components framework to execute bespoke projects in days rather than months.',
-			'Consistently achieved perfect 100/100 PageSpeed scores by using static architectures, layout drift prevention, and modern image pipelines.',
-			'Authored custom search engine frameworks tailored to regional optimization, boosting local lead generation.',
+			'Built the platform with Next.js, React, TypeScript, and Tailwind on Vercel.',
+			'Integrated Resend for transactional email and Vitest for automated testing.',
+			'Generating $1K in monthly recurring revenue.',
 		],
 		links: [{ label: 'Visit Faceout Studio', url: 'https://faceout.ca' }],
 		techStack: [
-			'Astro',
+			'Next.js',
 			'React',
+			'TypeScript',
 			'Tailwind CSS',
-			'SEO optimization',
-			'Cloudflare Pages',
-			'Framer Motion',
-			'Formspree',
+			'Vercel',
+			'Resend',
+			'Vitest',
 		],
-		metric: '100/100',
-		metricLabel: 'Average PageSpeed',
+		metric: '$1K',
+		metricLabel: 'Monthly Recurring Revenue',
 		type: 'agency',
+		architecturalInsight: {
+			label: 'Local business web platform',
+			description:
+				'Next.js and React on Vercel with Resend for client communications, Vitest for regression coverage, and SEO tooling for regional business visibility.',
+		},
 	},
 ];
 
 export const operatingPrinciples: OperatingPrinciple[] = [
 	{
-		title: 'I like messy workflows.',
+		title: 'I automate messy workflows.',
 		subtitle: 'Product ⇄ Operations ⇄ Code',
 		description:
-			'The most interesting, profitable, and durable software spans all three domains. I excel at converting untidied compliance manuals and logistical bottlenecks into strict, maintainable system code.',
+			'The best fixes remove manual steps before they become production incidents. I focus on automating configuration and compliance logic that ops teams previously had to handle by hand.',
 		iconName: 'git-branch',
 		caseStudy: {
 			problem:
-				'Handling differing, state-by-state maximum transactions and KYC thresholds across US/Canada led to highly fragile code and compliance bottlenecks.',
+				'Legacy configuration logic for transaction-critical flows relied on manual steps, introducing configuration errors in production.',
 			solution:
-				'Engineered a dynamic, schema-driven rule interpreter. Refactored hardcoded conditional nested loops into a declarative, decoupled rule state machine.',
+				'Automated the configuration pipeline for transaction-critical flows—replacing manual updates with validated, repeatable automation.',
 			impact:
-				'Eliminated compliance-drift errors and empowered the Operations team to verify, dry-run, and modify transaction logic in minutes without changing code.',
+				'Eliminated 100% of manual configuration errors in those flows.',
 		},
 	},
 	{
 		title: 'I care about rollouts.',
 		subtitle: 'Beyond the local dev server',
 		description:
-			'Features are only finished when they safely live in production. I build with comprehensive logging, backwards-compatible deployments, and fail-safe recovery configurations.',
+			'Features are not done until they survive real hardware, real regions, and real regulatory constraints. I have led rollouts across Canada, Australia, Hong Kong, Brazil, and Mexico.',
 		iconName: 'rocket',
 		caseStudy: {
 			problem:
-				'Unreliable regional cellular lines on kiosk cash dispensers caused transaction rollbacks to disconnect, leaving database and physical cash registers out of sync.',
+				'State-based regulatory requirements demanded custom UI/UX across a large Bitcoin ATM fleet, with high risk if rollouts broke in the field.',
 			solution:
-				'Constructed an offline-first transactional log with atomic rollback state controls and event replays.',
+				'Led state-based regulatory projects and served as lead operator for multi-region production rollouts while onboarding Bitcoin Depot as a strategic Bitaccess client.',
 			impact:
-				'Zero hardware discrepancy incidences recorded; system errors self-resolve gracefully upon cellular reconnection.',
+				'Delivered compliant kiosk experiences at scale; helped scale the strategic client relationship to $50M+ in monthly revenue during the Bitaccess acquisition period.',
 		},
 	},
 	{
 		title: 'I stay close to production.',
 		subtitle: 'Logs, telemetry, and customer reality',
 		description:
-			'Excellent code is built on real-world constraints. I study error telemetry, customer friction points, and infrastructure quirks to preemptively engineer preventative controls.',
+			'I came up through QA and technical operations before full-stack engineering. I debug with logs, simulators, and the same tools ops teams use when kiosks misbehave in the field.',
 		iconName: 'activity',
 		caseStudy: {
 			problem:
-				'Intermittent timeouts during peak Saturday traffic spikes caused consumer drop-offs on critical verification flows.',
+				'Validating behavior across 9,000+ kiosks was slow, and production escalations required fast cross-system debugging under time pressure.',
 			solution:
-				'Isolated high-traffic verification endpoints. Integrated distributed caching and restructured relational database indexes to minimize transaction blocks.',
+				'Enabled remote BTM simulator testing, wrote detailed tickets with logs and reproduction steps, and investigated incidents using Mezmo, Grafana, Amplitude, and admin panels.',
 			impact:
-				'Cut peak-load query latency by 82% and flattened customer support queries to near-zero levels.',
+				'Improved QA throughput by ~20 minutes per hour while supporting workflows tied to millions of customer transactions.',
 		},
 	},
 ];
 
 export const educationAndDetails = {
 	address: 'Ottawa, ON, Canada',
+	phone: '(613) 869-5116',
 	email: 'griffin.leblanc@gmail.com',
+	website: 'https://griffinleblanc.ca',
 	github: 'https://github.com/g-88',
 	linkedin: 'https://www.linkedin.com/in/griffinleblanc',
 	resumeUrl: '/griffin-leblanc-resume.pdf',
+	education: 'Bachelor of Commerce, Finance — Dalhousie University (2020)',
 };

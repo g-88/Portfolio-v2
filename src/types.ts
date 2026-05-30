@@ -13,6 +13,10 @@ export interface Project {
   metric?: string;
   metricLabel?: string;
   type: "fintech" | "startup" | "agency";
+  architecturalInsight?: {
+    label: string;
+    description: string;
+  };
 }
 
 export interface OperatingPrinciple {
