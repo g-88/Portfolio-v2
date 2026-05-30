@@ -56,6 +56,8 @@ export default function App() {
   const [messagesLog, setMessagesLog] = useState<{ id: string; timestamp: string; sender: string; company: string; payload: string }[]>([]);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const [messageSuccess, setMessageSuccess] = useState(false);
+  const [contactError, setContactError] = useState<string | null>(null);
+  const [resendStatus, setResendStatus] = useState<"live" | "simulated" | null>(null);
 
   // Set Ottawa Live Time (UTC-4 during Daylight Saving, otherwise UTC-5)
   useEffect(() => {
@@ -191,22 +193,53 @@ export default function App() {
     runRuleEngine();
   }, []);
 
-  // Contact simulated message handler
-  const handleSendMessage = (e: React.FormEvent) => {
+  // Contact simulated message handler with secure Express proxy call to Resend
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!contactName || !contactEmail || !contactMsg) return;
 
     setIsSendingMessage(true);
-    setTimeout(() => {
+    setContactError(null);
+    setResendStatus(null);
+    setMessageSuccess(false);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: contactName,
+          email: contactEmail,
+          company: contactCompany,
+          message: contactMsg
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Failed to transmit message payload safely.");
+      }
+
+      // Successful dispatch
+      const simulatedId = data.id || `TX-${Math.floor(1000 + Math.random() * 9000)}`;
+      const isSimulation = data.mode === "simulation";
+      
+      setResendStatus(isSimulation ? "simulated" : "live");
+      
       const newMsg = {
-        id: `TX-${Math.floor(1000 + Math.random() * 9000)}`,
+        id: simulatedId,
         timestamp: new Date().toLocaleTimeString(),
         sender: contactName,
         company: contactCompany || "Independent",
-        payload: contactMsg
+        payload: isSimulation 
+          ? `[SIMULATED TRANSMISSION] ${contactMsg}`
+          : contactMsg
       };
+
       setMessagesLog(prev => [newMsg, ...prev]);
-      setIsSendingMessage(false);
       setMessageSuccess(true);
       
       // Clear inputs
@@ -214,9 +247,14 @@ export default function App() {
       setContactEmail("");
       setContactCompany("");
       setContactMsg("");
-      
-      setTimeout(() => setMessageSuccess(false), 5000);
-    }, 1000);
+
+      setTimeout(() => setMessageSuccess(false), 8000);
+    } catch (err: any) {
+      console.error("Transmission error:", err);
+      setContactError(err.message || "An unexpected network error was recorded.");
+    } finally {
+      setIsSendingMessage(false);
+    }
   };
 
   return (
@@ -1277,17 +1315,17 @@ export default function App() {
                   <button
                     type="submit"
                     disabled={isSendingMessage}
-                    className="w-full bg-transparent hover:bg-brand-mint text-brand-mint hover:text-brand-obsidian border border-brand-mint/40 hover:border-brand-mint font-bold py-3.5 px-4 rounded-lg text-sm transition-all flex items-center justify-center gap-2"
+                    className="w-full bg-transparent hover:bg-brand-mint text-brand-mint hover:text-brand-obsidian border border-brand-mint/40 hover:border-brand-mint font-bold uppercase tracking-wider py-3.5 px-4 rounded-none text-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
                   >
                     {isSendingMessage ? (
                       <>
                         <span className="animate-spin rounded-full h-4 w-4 border-2 border-brand-mint border-t-transparent" />
-                        Transmitting telemetry...
+                        TRANSMITTING TELEMETRY...
                       </>
                     ) : (
                       <>
                         <Rocket size={15} />
-                        Transmit Message POST
+                        TRANSMIT MESSAGE POST
                       </>
                     )}
                   </button>
@@ -1298,9 +1336,29 @@ export default function App() {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: "auto" }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="bg-brand-mint/10 border border-brand-mint/20 text-brand-mint p-3 rounded font-mono text-[10.5px] text-center"
+                        className="bg-brand-mint/10 border border-brand-mint/25 text-brand-mint p-3.5 rounded-none font-mono text-[10px] text-left space-y-1.5"
                       >
-                        ✓ Package delivered! API response status: 200 OK. Check console logs.
+                        <p className="font-semibold text-[10.5px]">✓ TRANSMISSION COMPLETED SUCCESSFULLY (200 OK)</p>
+                        {resendStatus === "live" ? (
+                          <p className="text-zinc-400">Message securely routed to <span className="text-white">griffin.leblanc@gmail.com</span> via live Resend email transit.</p>
+                        ) : (
+                          <p className="text-zinc-400">
+                            Active in Sandbox Simulation Mode. Payload is logged in the debug console to the right. 
+                            To send physical emails, declare <code className="bg-brand-slate px-1 py-0.5 text-brand-mint font-medium">RESEND_API_KEY</code> in Settings.
+                          </p>
+                        )}
+                      </motion.div>
+                    )}
+
+                    {contactError && (
+                      <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="bg-red-500/5 border border-red-500/35 text-red-400 p-3.5 rounded-none font-mono text-[10px] text-left space-y-1"
+                      >
+                        <p className="font-semibold text-[10.5px] text-red-500">✗ TRANSMISSION ERROR / RESPONSE FAILED (500)</p>
+                        <p className="text-zinc-400">{contactError}</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
