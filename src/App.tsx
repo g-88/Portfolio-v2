@@ -585,7 +585,7 @@ export default function App() {
 									rel="noopener noreferrer"
 									className="flex items-center gap-1 hover:text-brand-mint transition-colors"
 								>
-									<Github size={14} /> /g-88
+									<Github size={14} /> /g8-bd
 								</a>
 								<a
 									href={`mailto:${educationAndDetails.email}`}

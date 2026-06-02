@@ -122,8 +122,7 @@ export const operatingPrinciples: OperatingPrinciple[] = [
 				'Legacy configuration logic for transaction-critical flows relied on manual steps, introducing configuration errors in production.',
 			solution:
 				'Automated the configuration pipeline for transaction-critical flows—replacing manual updates with validated, repeatable automation.',
-			impact:
-				'Eliminated 100% of manual configuration errors in those flows.',
+			impact: 'Eliminated 100% of manual configuration errors in those flows.',
 		},
 	},
 	{
@@ -163,7 +162,7 @@ export const educationAndDetails = {
 	phone: '(613) 869-5116',
 	email: 'griffin.leblanc@gmail.com',
 	website: 'https://griffinleblanc.ca',
-	github: 'https://github.com/g-88',
+	github: 'https://github.com/g8-bd',
 	linkedin: 'https://www.linkedin.com/in/griffinleblanc',
 	resumeUrl: '/griffin-leblanc-resume.pdf',
 	education: 'Bachelor of Commerce, Finance — Dalhousie University (2020)',
